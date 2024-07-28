@@ -6,6 +6,4 @@ data class ToDoState(
     val isLoading: Boolean = false,
     val notes: List<Note> = emptyList(),
     val userName: String = "",
-) {
-    fun isUserNameEmpty() = userName.isEmpty()
-}
+)

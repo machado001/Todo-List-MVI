@@ -8,7 +8,6 @@ import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
@@ -45,9 +44,8 @@ class ToDoViewModel(
     private fun addNote() = Unit
     private fun getNotesOnRefresh() = repository.getAllNotes()
     private fun updateUserName() = viewModelScope.launch(coroutineName) {
-        takeIf {
-            _uiState.value.isUserNameEmpty()
-        }?.let { eventChannel.send(ToDoEvent.SuggestUpdateUserName) }
+        takeIf { _uiState.value.userName.isEmpty() }
+            ?.let { eventChannel.send(ToDoEvent.SuggestUpdateUserName) }
     }
 
     companion object {
