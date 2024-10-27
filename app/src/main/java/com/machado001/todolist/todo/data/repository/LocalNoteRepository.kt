@@ -7,41 +7,53 @@ import com.machado001.todolist.core.domain.asEmptyDataResult
 import com.machado001.todolist.todo.domain.Note
 import com.machado001.todolist.todo.domain.NoteDataSource
 import com.machado001.todolist.todo.domain.NoteRepository
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
-import kotlin.coroutines.cancellation.CancellationException
+import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.withContext
 
 class LocalNoteRepository(
     private val dataSource: NoteDataSource
 ) : NoteRepository {
 
-    override val notes: Flow<List<Note>> = dataSource.notes
+    override val notes: Flow<List<Note>> = dataSource.notes.flowOn(Dispatchers.IO)
+
+    init {
+        println("LocalNoteRepository()")
+    }
+
 
     override suspend fun updateNote(note: Note): EmptyResult<LocalError> =
-        when (val result = dataSource.updateNote(note)) {
-            is Result.Success -> result.asEmptyDataResult()
-            is Result.Error -> {
-                when (result.error) {
-                    is LocalError -> result.asEmptyDataResult()
+        withContext(Dispatchers.IO) {
+            when (val result = dataSource.updateNote(note)) {
+                is Result.Success -> result.asEmptyDataResult()
+                is Result.Error -> {
+                    when (result.error) {
+                        LocalError.UNKNOWN_ERROR -> result.asEmptyDataResult()
+                    }
                 }
             }
         }
-
 
     override suspend fun createNote(note: Note): EmptyResult<LocalError> =
-        when (val result = dataSource.createNote(note)) {
-            is Result.Error -> {
-                when (result.error) {
-                    else -> result.asEmptyDataResult()
+        withContext(Dispatchers.IO) {
+            when (val result = dataSource.createNote(note)) {
+                is Result.Error -> {
+                    when (result.error) {
+                        LocalError.UNKNOWN_ERROR -> result.asEmptyDataResult()
+                    }
                 }
-            }
 
-            is Result.Success -> {
-                result.asEmptyDataResult()
+                is Result.Success -> {
+                    result.asEmptyDataResult()
+                }
             }
         }
 
 
-    override suspend fun deleteNote(note: Note): EmptyResult<LocalError> =
-        dataSource.deleteNote(note).asEmptyDataResult()
+    override suspend fun deleteNote(noteId: Int): EmptyResult<LocalError> =
+        withContext(Dispatchers.IO) {
+            dataSource.deleteNote(noteId).asEmptyDataResult()
+        }
 
 }

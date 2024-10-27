@@ -9,5 +9,5 @@ interface NoteDataSource {
     val notes: Flow<List<Note>>
     suspend fun createNote(note: Note): Result<Note, LocalError>
     suspend fun updateNote(note: Note): Result<Note, LocalError>
-    suspend fun deleteNote(note: Note): EmptyResult<LocalError>
+    suspend fun deleteNote(noteId: Int): EmptyResult<LocalError>
 }

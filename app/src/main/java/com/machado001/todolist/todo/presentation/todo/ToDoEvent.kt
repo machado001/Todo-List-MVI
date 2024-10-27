@@ -1,4 +1,4 @@
-package com.machado001.todolist.todo.presentation
+package com.machado001.todolist.todo.presentation.todo
 
 import com.machado001.todolist.core.presentation.designsystem.ui.UiText
 
