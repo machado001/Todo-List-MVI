@@ -59,9 +59,12 @@ fun GreetingRoot(modifier: Modifier = Modifier, vm: ToDoViewModel) {
 
 @Composable
 fun Greeting(state: ToDoUiState) {
-    LazyColumn {
-        items(state.notes.size) { note ->
-            NoteItem(state.notes[note])
+    LazyColumn(modifier = Modifier.padding(vertical = 8.dp, horizontal = 16.dp)) {
+        items(state.notes.size) { i ->
+            NoteItem(state.notes[i])
+            if (i != state.notes.size - 1) {
+                HorizontalDivider()
+            }
         }
     }
 }
@@ -71,7 +74,8 @@ fun NoteItem(note: Note, modifier: Modifier = Modifier) {
     Card(
         modifier = modifier
             .fillMaxWidth()
-            .padding(vertical = 8.dp, horizontal = 16.dp)
+            .padding(vertical = 8.dp),
+        elevation = CardDefaults.elevatedCardElevation(),
     ) {
         Column(modifier = modifier.padding(8.dp)) {
             Row {
