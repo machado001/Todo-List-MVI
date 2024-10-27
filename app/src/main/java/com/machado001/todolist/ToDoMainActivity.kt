@@ -4,7 +4,7 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
@@ -18,11 +18,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.machado001.todolist.core.presentation.designsystem.theme.ToDoListTheme
+import com.machado001.todolist.core.presentation.designsystem.ui.mapColorToState
 import com.machado001.todolist.todo.data.MockData
 import com.machado001.todolist.todo.data.repository.LocalNoteRepository
 import com.machado001.todolist.todo.domain.Note
@@ -80,22 +82,20 @@ fun NoteItem(note: Note, modifier: Modifier = Modifier) {
         Column(modifier = modifier.padding(8.dp)) {
             Row {
                 Text(note.title, modifier = modifier.weight(1.1f))
-                Text(note.date, fontWeight = FontWeight.Light)
-            }
-            Row {
-                Text(
-                    note.description,
-                    overflow = TextOverflow.Ellipsis,
-                    maxLines = 1,
-                    modifier = modifier.weight(1.1f)
-                )
                 Text(
                     note.state.toString(),
                     overflow = TextOverflow.Ellipsis,
-                    maxLines = 2,
-                    fontWeight = FontWeight.Light
+                    fontWeight = FontWeight.Light,
+                    modifier = modifier.background(mapColorToState(note.state)),
+                    color = Color.Black
                 )
             }
+            Text(
+                note.description,
+                overflow = TextOverflow.Ellipsis,
+                fontWeight = FontWeight.Light,
+                maxLines = 2,
+            )
         }
     }
 }
