@@ -7,7 +7,7 @@ import com.machado001.todolist.core.presentation.designsystem.theme.ToDoListThem
 
 @Composable
 fun AddNoteScreenRoot() {
-
+    AddNoteScreen(AddNoteScreenState()) { }
 }
 
 @Composable

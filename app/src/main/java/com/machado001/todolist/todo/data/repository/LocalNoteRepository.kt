@@ -18,11 +18,6 @@ class LocalNoteRepository(
 
     override val notes: Flow<List<Note>> = dataSource.notes.flowOn(Dispatchers.IO)
 
-    init {
-        println("LocalNoteRepository()")
-    }
-
-
     override suspend fun updateNote(note: Note): EmptyResult<LocalError> =
         withContext(Dispatchers.IO) {
             when (val result = dataSource.updateNote(note)) {
@@ -49,7 +44,6 @@ class LocalNoteRepository(
                 }
             }
         }
-
 
     override suspend fun deleteNote(noteId: Int): EmptyResult<LocalError> =
         withContext(Dispatchers.IO) {

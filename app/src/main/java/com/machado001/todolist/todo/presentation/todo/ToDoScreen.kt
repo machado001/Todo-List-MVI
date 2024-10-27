@@ -39,7 +39,10 @@ import com.machado001.todolist.todo.domain.Note
 import com.machado001.todolist.todo.domain.NoteState
 
 @Composable
-fun GreetingRoot(modifier: Modifier = Modifier, vm: ToDoViewModel) {
+fun TodoListMviRoot(
+    vm: ToDoListMviViewModel,
+    onGoingToAddNoteScreen: () -> Unit
+) {
     val context = LocalContext.current
     val state by vm.uiState.collectAsStateWithLifecycle()
     ObserveAsEvents(vm.events) { event ->
@@ -48,10 +51,11 @@ fun GreetingRoot(modifier: Modifier = Modifier, vm: ToDoViewModel) {
                 .show()
 
             is ToDoEvent.Success -> Toast.makeText(context, "Success", Toast.LENGTH_SHORT).show()
+            ToDoEvent.OnGoingToAddNoteScreen -> onGoingToAddNoteScreen()
         }
     }
 
-    Greeting(state = state,
+    TodoListMvi(state = state,
         onAction = { action ->
             vm.onAction(action)
         }
@@ -59,7 +63,7 @@ fun GreetingRoot(modifier: Modifier = Modifier, vm: ToDoViewModel) {
 }
 
 @Composable
-fun Greeting(state: ToDoUiState, onAction: (ToDoAction) -> Unit) {
+fun TodoListMvi(state: ToDoUiState, onAction: (ToDoAction) -> Unit) {
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -67,9 +71,11 @@ fun Greeting(state: ToDoUiState, onAction: (ToDoAction) -> Unit) {
             .padding(vertical = 8.dp, horizontal = 16.dp)
     ) {
         if (state.isLoading) {
-            CircularProgressIndicator(modifier = Modifier
-                .align(Alignment.Center)
-                .size(30.dp))
+            CircularProgressIndicator(
+                modifier = Modifier
+                    .align(Alignment.Center)
+                    .size(30.dp)
+            )
         } else {
             LazyColumn {
                 items(state.notes.size) { i ->
@@ -83,7 +89,7 @@ fun Greeting(state: ToDoUiState, onAction: (ToDoAction) -> Unit) {
                 }
             }
             FloatingActionButton(
-                onClick = { },
+                onClick = { onAction(ToDoAction.OnCreateNoteClick) },
                 modifier = Modifier.align(Alignment.BottomEnd)
             ) {
                 Icon(Icons.Default.Add, "Add note")
@@ -138,7 +144,7 @@ fun NoteItem(
 @Composable
 fun GreetingPreview() {
     ToDoListTheme {
-        Greeting(
+        TodoListMvi(
             ToDoUiState(
                 notes = listOf(
                     Note(

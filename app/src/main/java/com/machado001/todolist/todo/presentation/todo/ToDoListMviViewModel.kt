@@ -15,9 +15,7 @@ import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
-class ToDoViewModel(
-    private val repository: NoteRepository
-) : ViewModel() {
+class ToDoListMviViewModel(private val repository: NoteRepository) : ViewModel() {
     private val _uiState = MutableStateFlow(ToDoUiState(isLoading = true))
     val uiState = _uiState.asStateFlow()
 
@@ -36,7 +34,7 @@ class ToDoViewModel(
     }
 
     fun onAction(action: ToDoAction) = when (action) {
-        is ToDoAction.OnCreateNoteClick -> addNote(action.note)
+        is ToDoAction.OnCreateNoteClick -> goToAddNoteScreen()
         is ToDoAction.OnDeleteNoteClick -> deleteNote(action.noteId)
         is ToDoAction.OnUpdateNoteClick -> updateNote(action.note)
     }
@@ -61,12 +59,7 @@ class ToDoViewModel(
         }
     }
 
-    private fun addNote(note: Note) = viewModelScope.launch {
-        when (repository.createNote(note)) {
-            is Result.Error -> ToDoEvent.Error(UiText.StringResource(R.string.error_adding_note))
-            is Result.Success -> ToDoEvent.Success
-        }.also { event ->
-            eventChannel.send(event)
-        }
+    private fun goToAddNoteScreen() = viewModelScope.launch {
+        eventChannel.send(ToDoEvent.OnGoingToAddNoteScreen)
     }
 }

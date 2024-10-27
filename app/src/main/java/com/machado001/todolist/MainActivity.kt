@@ -9,10 +9,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.ui.Modifier
 import com.machado001.todolist.core.presentation.designsystem.theme.ToDoListTheme
-import com.machado001.todolist.todo.data.MockData
-import com.machado001.todolist.todo.data.repository.LocalNoteRepository
-import com.machado001.todolist.todo.presentation.todo.GreetingRoot
-import com.machado001.todolist.todo.presentation.todo.ToDoViewModel
+import com.machado001.todolist.todo.presentation.navigation.NavigationManager
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -23,11 +20,8 @@ class MainActivity : ComponentActivity() {
                 Scaffold(
                     modifier = Modifier.fillMaxSize()
                 ) { innerPadding ->
-                    val mockData = MockData()
-                    val repository = LocalNoteRepository(mockData)
-                    GreetingRoot(
-                        modifier = Modifier.padding(innerPadding),
-                        vm = ToDoViewModel(repository)
+                    NavigationManager.AppNav(
+                        modifier = Modifier.padding(innerPadding)
                     )
                 }
             }
