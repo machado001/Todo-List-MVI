@@ -9,6 +9,8 @@ import com.machado001.todolist.todo.domain.NoteState
 import io.bloco.faker.Faker
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
+import java.text.SimpleDateFormat
+import java.util.Locale
 import kotlin.coroutines.cancellation.CancellationException
 
 //Simulating a database while i don't have a real one.
@@ -56,7 +58,8 @@ class MockData : NoteDataSource {
 private val faker = Faker()
 
 private val noteMockDatabase = buildList {
-    repeat(30) {
+    val dateFormat = SimpleDateFormat("dd/MM/yyyy", Locale.US)
+    repeat(10) {
         val possibleNoteStates = listOf(NoteState.Todo, NoteState.Done, NoteState.InProgress)
         with(faker) {
             add(
@@ -64,7 +67,7 @@ private val noteMockDatabase = buildList {
                     id = number.digit().toInt(),
                     title = lorem.characters(7),
                     description = lorem.characters(30),
-                    date = String.format("dd/MM/yyyy", date.forward()),
+                    date = dateFormat.format(date.forward()),
                     state = possibleNoteStates.random()
                 )
             )
