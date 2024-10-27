@@ -1,4 +1,4 @@
-package com.machado001.todolist.core.presentation.designsystem.ui.theme
+package com.machado001.todolist.core.presentation.designsystem.theme
 
 import androidx.compose.material3.Typography
 import androidx.compose.ui.text.TextStyle

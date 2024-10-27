@@ -1,4 +1,4 @@
-package com.machado001.todolist.core.presentation.designsystem.ui.theme
+package com.machado001.todolist.core.presentation.designsystem.theme
 
 import android.app.Activity
 import android.os.Build

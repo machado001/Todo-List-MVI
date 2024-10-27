@@ -1,9 +1,9 @@
 package com.machado001.todolist.todo.presentation
 
+import com.machado001.todolist.todo.domain.Note
+
 sealed interface ToDoAction {
-    data object OnUpdateNoteClick : ToDoAction
-    data object OnDeleteNoteClick : ToDoAction
-    data object OnAddNoteClick : ToDoAction
-    data object OnUpdateUserNameClick : ToDoAction
-    data object OnRefreshPush : ToDoAction
+    data class OnUpdateNoteClick(val note: Note) : ToDoAction
+    data class OnDeleteNoteClick(val note: Note) : ToDoAction
+    data class OnCreateNoteClick(val note: Note) : ToDoAction
 }
