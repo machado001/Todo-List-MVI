@@ -17,7 +17,6 @@ import kotlin.coroutines.cancellation.CancellationException
 class MockData : NoteDataSource {
 
     private val faker = Faker()
-
     private val noteMockDatabase = buildList {
         val dateFormat = SimpleDateFormat("dd/MM/yyyy", Locale.US)
         val possibleNoteStates = listOf(NoteState.Todo, NoteState.Done, NoteState.InProgress)
@@ -26,17 +25,14 @@ class MockData : NoteDataSource {
                 add(
                     Note(
                         id = id,
-                        title = lorem.characters(7),
-                        description = lorem.characters(30),
+                        title = lorem.supplemental(),
+                        description = lorem.sentence(10),
                         date = dateFormat.format(date.forward()),
                         state = possibleNoteStates.random()
                     )
                 )
             }
-            println("created: $id")
         }
-
-
     }.toMutableList()
 
     override val notes: Flow<List<Note>> = flow {
